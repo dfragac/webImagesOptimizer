@@ -27,7 +27,7 @@ justUpdated=false
 
 echo "Checking requisites..."
 for pkg in $pkgRequisites; do
-    if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
+    if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" > /dev/null; then
         echo "  [OK] $pkg is already installed"
     else
 	
@@ -45,7 +45,7 @@ for pkg in $pkgRequisites; do
 			justUpdated=true
 		fi
 		echo "    ... installing $pkg..."
-		if apt-get -qqq install $pkg; then
+		if apt-get -qq install $pkg > /dev/null; then
 			echo "    ... $pkg successfully installed! :-)"
 		else
 			echo "    ... ERROR installing $pkg :-("
@@ -57,12 +57,12 @@ done
 
 # Resize images bigger than 3Mpx (2048x1536)
 echo "Resizing images..."
-find $folder -type f -iregex ".*\.\(jpg\|jpeg\|png\|gif\)" -exec convert {} -resize '2048x1536>' -quiet {} \; 2> /dev/null
+find $folder -type f -iregex ".*\.\(jpg\|jpeg\|png\|gif\)" -exec convert {} -resize '2048x1536>' -quiet {} \; > /dev/null
 
 #Optimize jpeg images to 60% compression (Photoshop "High Quality")
 echo "Optimizing JPEGs..."
-find $folder -type f -iregex ".*\.\(jpg\|jpeg\)" -exec jpegoptim --strip-all --max=60 --force --quiet {} \; 2> /dev/null
+find $folder -type f -iregex ".*\.\(jpg\|jpeg\)" -exec jpegoptim --strip-all --max=60 --force --quiet {} \; > /dev/null
 
 #Optimize PNG images (-o1 > 48 trials of optimization, decrease for faster optimization)
 echo "Optimizing PNGs..."
-find $folder -type f -name "*.png" -exec optipng -o1 -force -quiet {} \; 2> /dev/null
+find $folder -type f -name "*.png" -exec optipng -o1 -force -quiet {} \; > /dev/null
